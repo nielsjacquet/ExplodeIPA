@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SensitiveData>
+    <Items>
+        <Item>
+            <detect>[\d\-,\.]{4,20}</detect>
+            <replace>***</replace>
+        </Item>
+        <!--Item>
+            <detect>your regex</detect>
+            <replace>your replacement string</replace>
+        </Item-->
+    </Items>
+
+    <CrashMessages>
+        <CrashMessage>
+            <detect>[\d\-,\.]{4,20}</detect>
+            <replace>****</replace>
+        </CrashMessage>
+        <CrashMessage>
+            <detect>[a-zA-Z0-9+&amp;*-]+(?:\.[a-zA-Z0-9_+&amp;*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}</detect>
+            <replace>****</replace>
+        </CrashMessage>
+        <CrashMessage>
+            <detect>(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)</detect>
+            <replace>****</replace>
+        </CrashMessage>
+        <CrashMessage>
+            <detect>((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*&apos;;/?:@&amp;=+$,A-Za-z0-9])+)([).!&apos;;/?:,][[:blank:]])?</detect>
+            <replace>****</replace>
+        </CrashMessage>
+    </CrashMessages>
+    
+    <!--Use this block to configure URL parts that are sensitive and should be masked.
+     Only capture groups (those surrounded by parenthesis) are masked. -->
+    <MaskUrls>
+        <MaskUrl>/([0-9A-Fa-f]{8,})/</MaskUrl>
+        <MaskUrl>/([0-9A-Fa-f]{8,})</MaskUrl>
+        <MaskUrl>/([0-9]{5,})/</MaskUrl>
+        <MaskUrl>/([0-9]{5,})</MaskUrl>
+    </MaskUrls>
+    
+    <!--Use this block to configure filtering policy for SDK-provided strings, like error descriptions -->
+    <!--SDK>
+	    <SDKItem>
+            <detect>[\d]{3}\-[\d]{2}\-[\d]{4}</detect>
+            <replace>SSN</replace>
+        </SDKItem>
+        <SDKItem>
+            <detect>your regex</detect>
+            <replace>your replacement string</replace>
+        </SDKItem>
+    </SDK-->
+    
+</SensitiveData>

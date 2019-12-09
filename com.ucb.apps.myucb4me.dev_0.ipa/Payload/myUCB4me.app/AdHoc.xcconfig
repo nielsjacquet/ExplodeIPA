@@ -1,0 +1,12 @@
+// !!WARNING!! These properties will be overwritten by Fastlane (fastfale) on relaese
+
+// Provisioning Profile Configuration
+PRODUCT_NAME = myUCB4me
+CustomProductName = ${PRODUCT_NAME}
+PRODUCT_BUNDLE_IDENTIFIER = com.ucb.apps.myucb4me.dev
+
+CODE_SIGN_IDENTITY = iPhone Distribution: UCB Pharma S.A.
+DEVELOPMENT_TEAM = 8MHBGG6X8S
+
+// Configuration Name
+Config = AdHoc
