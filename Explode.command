@@ -93,16 +93,27 @@ copyConfig()
   if [[ $config = 'Config.plist' ]]
     then
       cp -v $DIR/$ogIpa/Payload/"$payloadApp"/Config.plist $DIR/$ogIpa
-      copyIpa
+      getCertificateDate
     else
-      copyIpa
+      getCertificateDate
   fi
-  printf "${GREEN}Copy the Config.plist${NC}\n"
+}
+
+getCertificateDate()
+{
+  printf "${GREEN}Getting the certificate dates${NC}\n"
+  codesign -d --extract-certificates $DIR/$ogIpa/Payload/"$payloadApp"
+  certs=$(openssl x509 -inform DER -in codesign0 -noout -nameopt -oneline -dates)
+  printf "${BLUE}certs: $certs ${NC}\n"
+  echo $certs > $DIR/$ogIpa/SigningCertificate.txt
+  copyIpa
 }
 
 copyIpa()
 {
+  printf "${GREEN}Copy the Config.plist${NC}\n"
   mv -v $toBeExplodedFolder/$ogIpa $DIR/$ogIpa
+
 }
 
   ipaCheck
