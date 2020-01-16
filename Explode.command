@@ -93,19 +93,31 @@ copyConfig()
   if [[ $config = 'Config.plist' ]]
     then
       cp -v $DIR/$ogIpa/Payload/"$payloadApp"/Config.plist $DIR/$ogIpa
-      getCertificateDate
+      getSigningCertificateDate
     else
-      getCertificateDate
+      getSigningCertificateDate
   fi
 }
 
-getCertificateDate()
+getSigningCertificateDate()
 {
-  printf "${GREEN}Getting the certificate dates${NC}\n"
+  printf "${GREEN}Getting the Signing certificate dates${NC}\n"
   codesign -d --extract-certificates $DIR/$ogIpa/Payload/"$payloadApp"
   certs=$(openssl x509 -inform DER -in codesign0 -noout -nameopt -oneline -dates)
   printf "${BLUE}certs: $certs ${NC}\n"
-  echo $certs > $DIR/$ogIpa/SigningCertificate.txt
+  echo "SigningCertificate Dates:" > $DIR/$ogIpa/SigningCertificate.txt
+  echo $certs >> $DIR/$ogIpa/SigningCertificate.txt
+  echo "" >> $DIR/$ogIpa/SigningCertificate.txt
+  getProvisioningProfileDate
+}
+
+getProvisioningProfileDate()
+{
+  printf "${GREEN}Getting the Provisioning Profile end date${NC}\n"
+  prov=$(strings $DIR/$ogIpa/Payload/"$payloadApp"/embedded.mobileprovision | grep -A1 ExpirationDate )
+  printf "${BLUE}Provisioning Profile end date: $prov ${NC}\n"
+  echo "Provisioning Profile end date:" >> $DIR/$ogIpa/SigningCertificate.txt
+  echo $prov >> $DIR/$ogIpa/SigningCertificate.txt
   copyIpa
 }
 
