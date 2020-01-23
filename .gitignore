@@ -1,3 +1,4 @@
 .app
 .ipa
 .DS_Store
+*.ipa/
