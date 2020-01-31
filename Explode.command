@@ -59,13 +59,13 @@ unZip()
 {
   printf "${GREEN}Unzipping the ipa${NC}\n"
   cd $toBeExplodedFolder
-  unzip "$ogIpa" -d $DIR/$ogIpa                                                ##unzip the ipa in a temp folder
+  unzip "$ogIpa" -d "$DIR/$ogIpa"                                                ##unzip the ipa in a temp folder
 }
 
 extractEntitlements()
 {
   printf "${GREEN}Extracting the entitlements${NC}\n"
-  cd $DIR/$ogIpa/Payload
+  cd "$DIR/$ogIpa/Payload"
   payloadApp=$(ls | grep '.app')
   cd "$DIR/$ogIpa"
   codesign -d -vv --entitlements entitlements.txt ./Payload/"$payloadApp"         ##codesign the entitlements
@@ -73,11 +73,11 @@ extractEntitlements()
 
 copyInfo()
 {
-  cd $DIR/$ogIpa/Payload/"$payloadApp"
+  cd $DIR/"$ogIpa"/Payload/"$payloadApp"
   info=$(ls | grep 'Info.plist')
   if [[ $info = 'Info.plist' ]]
     then
-      cp -v $DIR/$ogIpa/Payload/"$payloadApp"/$info $DIR/$ogIpa
+      cp -v $DIR/"$ogIpa"/Payload/"$payloadApp"/$info "$DIR/$ogIpa"
       copyConfig
     else
       copyConfig
@@ -87,12 +87,12 @@ copyInfo()
 
 copyConfig()
 {
-  cd $DIR/$ogIpa/Payload/"$payloadApp"
+  cd $DIR/"$ogIpa"/Payload/"$payloadApp"
   config=$(ls | grep 'Config.plist')
   echo $config
   if [[ $config = 'Config.plist' ]]
     then
-      cp -v $DIR/$ogIpa/Payload/"$payloadApp"/Config.plist $DIR/$ogIpa
+      cp -v $DIR/"$ogIpa"/Payload/"$payloadApp"/Config.plist "$DIR/$ogIpa"
       getSigningCertificateDate
     else
       getSigningCertificateDate
@@ -102,12 +102,12 @@ copyConfig()
 getSigningCertificateDate()
 {
   printf "${GREEN}Getting the Signing certificate dates${NC}\n"
-  codesign -d --extract-certificates $DIR/$ogIpa/Payload/"$payloadApp"
+  codesign -d --extract-certificates $DIR/"$ogIpa"/Payload/"$payloadApp"
   certs=$(openssl x509 -inform DER -in codesign0 -noout -nameopt -oneline -dates)
   printf "${BLUE}certs: $certs ${NC}\n"
-  echo "SigningCertificate Dates:" > $DIR/$ogIpa/SigningCertificate.txt
-  echo $certs >> $DIR/$ogIpa/SigningCertificate.txt
-  echo "" >> $DIR/$ogIpa/SigningCertificate.txt
+  echo "SigningCertificate Dates:" > $DIR/"$ogIpa"/SigningCertificate.txt
+  echo $certs >> $DIR/"$ogIpa"/SigningCertificate.txt
+  echo "" >> $DIR/"$ogIpa"/SigningCertificate.txt
   getProvisioningProfileDate
 }
 
@@ -116,15 +116,15 @@ getProvisioningProfileDate()
   printf "${GREEN}Getting the Provisioning Profile end date${NC}\n"
   prov=$(strings $DIR/$ogIpa/Payload/"$payloadApp"/embedded.mobileprovision | grep -A1 ExpirationDate )
   printf "${BLUE}Provisioning Profile end date: $prov ${NC}\n"
-  echo "Provisioning Profile end date:" >> $DIR/$ogIpa/SigningCertificate.txt
-  echo $prov >> $DIR/$ogIpa/SigningCertificate.txt
+  echo "Provisioning Profile end date:" >> $DIR/"$ogIpa"/SigningCertificate.txt
+  echo $prov >> $DIR/"$ogIpa"/SigningCertificate.txt
   copyIpa
 }
 
 copyIpa()
 {
   printf "${GREEN}Copy the Config.plist${NC}\n"
-  mv -v $toBeExplodedFolder/$ogIpa $DIR/$ogIpa
+  mv -v $toBeExplodedFolder/"$ogIpa" $DIR/"$ogIpa"
 
 }
 
