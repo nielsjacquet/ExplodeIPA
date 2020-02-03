@@ -50,7 +50,7 @@ ipaCheck()
         then
           amountOfIpas+=("$toBeExploded")                         ##put the file in an array
           ipaArrayLength=${#amountOfIpas[@]}                        ##Get the array length for the next statement
-        fi
+      fi
     done
   if [[ $ipaArrayLength < "1" ]]                                    ## if the array length is less than 1, exit the script
    then
