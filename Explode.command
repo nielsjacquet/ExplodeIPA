@@ -25,6 +25,20 @@ DBR()
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  ##Homedir
 toBeExplodedFolder="$DIR/toBeExploded"
 
+helpFunction()
+{
+  echo ""
+  echo "Usage: $0 -i ipaPath"
+  echo -e "\t-i ipaPath -- REQUIRED "
+  exitProcedure # Exit script after printing help
+}
+
+copyToExplodedFolder()
+{
+  echo Copy the ipa to the to be exploded folder
+  cp "$ipaArg" "$toBeExplodedFolder"
+}
+
 ipaCheck()
 {
   for toBeExploded in "$toBeExplodedFolder"/*
@@ -41,7 +55,7 @@ ipaCheck()
   if [[ $ipaArrayLength < "1" ]]                                    ## if the array length is less than 1, exit the script
    then
     printf "${RED}no ipa present in the toBeExplodedFolder: $toBeExplodedFolder${NC}\n"
-    exit 113                                                        ##exit with code 113
+    exitProcedure                                                        ##exit with code 113
   fi
 }
 
@@ -125,11 +139,39 @@ copyIpa()
 {
   printf "${GREEN}Copy the Config.plist${NC}\n"
   mv -v $toBeExplodedFolder/"$ogIpa" $DIR/"$ogIpa"
-
 }
 
-  ipaCheck
-  getOgIpa
-  unZip
-  extractEntitlements
-  copyInfo
+exitProcedure()
+{
+  exit 1
+}
+
+while getopts "i:?:h:" opt
+do
+   case "$opt" in
+      i ) ipaArg="$OPTARG" ;;               # Ipa path argument
+      ? ) helpFunction ;;                   # Print helpFunction in case parameter is non-existent
+      h ) helpFunction ;;                   # Print helpFunction in case parameter is non-existent
+   esac
+done
+
+if [[ -z $ipaArg ]]
+  then
+    echo ipaArg is empty: $ipaArg
+    ipaCheck
+    getOgIpa
+    unZip
+    extractEntitlements
+    copyInfo
+fi
+
+if [[ ! -z $ipaArg  ]]
+  then
+   echo ipaArg is not empty: $ipaArg
+   copyToExplodedFolder
+   ipaCheck
+   getOgIpa
+   unZip
+   extractEntitlements
+   copyInfo
+fi
