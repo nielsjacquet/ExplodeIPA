@@ -85,7 +85,12 @@ extractEntitlements()
   cd "$DIR/$filename/Payload"
   payloadApp=$(ls | grep '.app')
   cd "$DIR/$filename"
-  codesign -d -vv --entitlements entitlements.txt ./Payload/"$payloadApp"         ##codesign the entitlements
+  pwd
+  codesign -d -vv --entitlements entitlements.xml.plist --xml ./Payload/"$payloadApp"      ##codesign the entitlements
+  entit=$(ls | grep 'entitlements.xml.plist')
+  echo entitlement: $entit
+  printf "${BLUE}-------------${NC}\n"
+  plutil -convert xml1 $entit
 }
 
 copyInfo()
@@ -107,6 +112,7 @@ copyConfig()
   cd $DIR/"$filename"/Payload/"$payloadApp"
   config=$(ls | grep 'Config.plist')
   echo $config
+  cp -v $DIR/"$filename"/Payload/"$payloadApp"/Info.plist "$DIR/$filename"
   if [[ $config = 'Config.plist' ]]
     then
       cp -v $DIR/"$filename"/Payload/"$payloadApp"/Config.plist "$DIR/$filename"
@@ -123,8 +129,8 @@ getSigningCertificateDate()
   certs=$(openssl x509 -inform DER -in codesign0 -noout -nameopt -oneline -dates)
   printf "${BLUE}certs: $certs ${NC}\n"
   echo "SigningCertificate Dates:" > $DIR/"$ogIpa"/SigningCertificate.txt
-  echo $certs >> $DIR/"$filename"/SigningCertificate.txt
-  echo "" >> $DIR/"$filename"/SigningCertificate.txt
+  echo $certs >> "$DIR/$filename/SigningCertificate.txt"
+  echo "" >> "$DIR/$filename/SigningCertificate.txt"
   getProvisioningProfileDate
 }
 
