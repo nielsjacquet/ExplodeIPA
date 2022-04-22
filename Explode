@@ -95,7 +95,7 @@ extractEntitlements()
 
 copyInfo()
 {
-  cd $DIR/"$ogIpa"/Payload/"$payloadApp"
+  cd $DIR/"$filename"/Payload/"$payloadApp"
   info=$(ls | grep 'Info.plist')
   if [[ $info = 'Info.plist' ]]
     then
