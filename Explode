@@ -22,8 +22,8 @@ DBR()
 }
 
 ##Paths
-#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  ##Homedir
-DIR="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  ##Homedir
+#DIR="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa"
 toBeExplodedFolder="$DIR/toBeExploded"
 
 helpFunction()
